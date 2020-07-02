@@ -1,0 +1,87 @@
+# HaryKali own the code
+# v0.01 
+import datetime as dt
+import psutil as p
+
+
+class RealtimeCondtion():
+    def __init__(self, name):
+        self.name = name
+        self.menu()
+
+    def cpu_cond(self):
+        print("Here is the cpu condtion: " + str(p.cpu_percent()) + "%")
+
+        return str(p.cpu_percent(interval=2))
+
+    def mem_cond(self):
+        print("Here is the memory condtion: " + str(p.virtual_memory().percent) + "%")
+        return str(p.virtual_memory().percent)
+
+    def net_cond(self):
+        print("Here is the net condtion: " + str(p.net_io_counters()))
+        return str(p.net_io_counters())
+
+    def build_txt(self):
+        try:
+            with open(r"C:\Users\yui10\Desktop\pc_condtion _data\condition.txt", "a") as con_file:
+                time = dt.datetime.now().strftime("%F %T")
+                con_file.write(f"PC name:{self.name}  Time:" + time + "\n")
+                con_file.write(str(self.cpu_cond()) + "\t\n")
+                con_file.write(str(self.mem_cond()) + "\t\n")
+                con_file.write(str(self.net_cond()) + "\t\n")
+                con_file.write("\n\n\n")
+
+                print("Sucess!")
+
+        except FileNotFoundError:
+
+            print("Error!Cannot find a file")
+            command = input("是否需要在路径新建一个文件并继续执行操作？（Y/N）")
+
+            if (command == "Y" or command == "y"):
+                with open(r"C:\Users\yui10\Desktop\pc_condtion _data\condition.txt", "w") as con_file:
+                    time = dt.datetime.now().strftime("%F %T")
+                    con_file.write(f"PC name:{self.name}  Time:" + time + "\n")
+                    con_file.write(str(self.cpu_cond()) + "\t\n")
+                    con_file.write(str(self.mem_cond()) + "\t\n")
+                    con_file.write(str(self.net_cond()) + "\t\n")
+                    con_file.write("\n\n\n")
+                    print("Sucess!")
+
+            else:
+                pass
+
+    def menu(self):
+        active = True
+        while (active):
+            mark = input(f"""
+*****************************************
+    欢迎使用电脑情况实时监控系统：
+        1.查看cpu运行状况
+        2.查看内存的情况
+        3.查看网络连接的情况
+        4.查看所有的情况
+        5.生成统计文本
+        7.退出程序
+*****************************************
+            """)
+            mark = int(mark)
+            if (mark == 1):
+                self.cpu_cond()
+            elif (mark == 2):
+                self.mem_cond()
+            elif (mark == 3):
+                self.net_cond()
+            elif (mark == 4):
+                self.cpu_cond()
+                self.mem_cond()
+                self.net_cond()
+            elif (mark == 5):
+                self.build_txt()
+
+            elif (mark == 7):
+                active = False
+
+
+HaryKali_pc = RealtimeCondtion(name="HaryKali")
