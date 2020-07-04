@@ -1,7 +1,10 @@
 # HaryKali own the code
-# v0.01 
+# v0.01
 import datetime as dt
 import psutil as p
+import numpy as np
+from matplotlib import pyplot as plt
+import time
 
 
 class RealtimeCondtion():
@@ -12,7 +15,7 @@ class RealtimeCondtion():
     def cpu_cond(self):
         print("Here is the cpu condtion: " + str(p.cpu_percent()) + "%")
 
-        return str(p.cpu_percent(interval=2))
+        return str(p.cpu_percent(interval=0.5))
 
     def mem_cond(self):
         print("Here is the memory condtion: " + str(p.virtual_memory().percent) + "%")
@@ -52,36 +55,80 @@ class RealtimeCondtion():
             else:
                 pass
 
+    def draw_pic(self):
+        test = 0
+        cpu_per_dict = {}
+        mem_per_dict = {}
+        print("Start Runing test")
+        while (True):
+            if (test < 5):
+                print(f"""---------now is runing No.{test + 1} ---------""")
+
+                cpu_per_dict[test] = self.cpu_cond()
+                mem_per_dict[test] = self.mem_cond()
+
+                time.sleep(0.3)
+                test += 1
+            else:
+                break
+
+        plt.title = ("CPU and Memory percent")
+        plt.xlabel = ("test/No.")
+        plt.ylabel = ("percent/%")
+
+        x = list(cpu_per_dict.keys())
+        y_cpu = list(cpu_per_dict.values())
+        y_mem = list(mem_per_dict.values())
+
+        print(x)
+        print(y_cpu)
+        print(y_mem)
+
+
+        plt.plot(x, y_cpu)
+        plt.plot(x, y_mem)
+        plt.show()
+
     def menu(self):
         active = True
         while (active):
             mark = input(f"""
-*****************************************
-    欢迎使用电脑情况实时监控系统：
-        1.查看cpu运行状况
-        2.查看内存的情况
-        3.查看网络连接的情况
-        4.查看所有的情况
-        5.生成统计文本
-        7.退出程序
-*****************************************
-            """)
+        *****************************************
+        欢迎使用电脑情况实时监控系统：
+            1.查看cpu运行状况
+            2.查看内存的情况
+            3.查看网络连接的情况
+            4.查看所有的情况
+            5.生成统计文本
+            6.生成统计图表
+            7.退出程序
+        *****************************************
+                """)
             mark = int(mark)
+
             if (mark == 1):
                 self.cpu_cond()
+
             elif (mark == 2):
                 self.mem_cond()
+
             elif (mark == 3):
                 self.net_cond()
+
             elif (mark == 4):
                 self.cpu_cond()
                 self.mem_cond()
                 self.net_cond()
+
             elif (mark == 5):
+
                 self.build_txt()
+            elif (mark == 6):
+                self.draw_pic()
 
             elif (mark == 7):
                 active = False
 
 
 HaryKali_pc = RealtimeCondtion(name="HaryKali")
+
