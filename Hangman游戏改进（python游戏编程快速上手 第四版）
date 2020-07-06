@@ -1,0 +1,177 @@
+""""
+改进于python游戏编程快速上手第八章
+
+"""
+
+
+
+import random
+from random_words import RandomWords
+import sys
+
+DIFFERENT_STEP = ["""
+ +---+
+     |
+     |
+     | 
+===========     
+""", """
+ +---+
+ O   |
+     |
+     | 
+===========     
+""", """
+
+ +---+
+ O   |
+ |   |
+     | 
+===========     
+""", """
+ +---+
+ O   |
+ |\  |
+     | 
+===========     
+
+""", """
+    
+ +---+
+ O   |
+/|\  |
+     | 
+===========     
+""", """
+ +---+
+ O   |
+/|\  |
+     | 
+===========     
+
+""", """
+ +---+
+ O   |
+/|\  |
+/ \  | 
+===========     
+""", ]
+
+# word_list = "apple bnana cat".split()
+rw = RandomWords()
+word_list = rw.random_words(count=10)
+
+
+def take_r_words(word_list):
+    word_mark = random.randint(0, len(word_list) - 1)
+    return word_list[word_mark]
+
+
+def display_screen(mis_letters, correct_letter, secret_word):
+    print(DIFFERENT_STEP[len(mis_letters)])
+    print()
+
+    for letter in mis_letters:
+        print(letter, end="")
+
+    slash = '_' * len(secret_word)
+
+    for num in range(len(secret_word)):
+        if secret_word[num] in correct_letter:
+            slash = slash[:num] + secret_word[num] + slash[num + 1:]
+
+    for letter in slash:
+        print(letter, end="")
+
+    print()
+
+
+def get_guess(guessed):
+    active = True
+    while active:
+
+        guess_word = input("Please input your word ")
+        guess_word = guess_word.lower()
+
+        if len(guess_word) != 1:
+            print("Please input a sigle word")
+
+        elif guess_word in guessed:
+            print("Oh, you have already entered this word please change one")
+
+        elif guess_word not in "abcdefghijklmnopqrstuvwxyz":
+            print("Pleas input letter")
+
+        else:
+            return guess_word
+
+
+def reset_game():
+    print("Anoter round?(yes/not)")
+    return input().lower().startswith('y')
+
+
+print("Now loading the prog.........")
+
+misletters = ""
+correct_letters = ""
+secret_word = take_r_words(word_list)
+game_cond = False
+active = False
+
+chose_mark = input("""
+             H a n g m a n 
+---------------------------------------------
+welcome, please choses game mode:
+1.Newschool
+4.Exit
+---------------------------------------------
+""")
+
+if chose_mark == "1":
+    active = True
+else:
+    sys.exit(0)
+
+while active:
+    # mark = index_screen()
+    display_screen(misletters, correct_letters, secret_word)
+
+    guess = get_guess(misletters + correct_letters)
+
+    if guess in secret_word:
+        correct_letters = correct_letters + guess
+
+        found_all_letters = True
+
+        for num in range(len(secret_word)):
+
+            if secret_word[num] not in correct_letters:
+                found_all_letters = False
+                break
+
+        if found_all_letters:
+            print("Yes the secret word is: " + secret_word + " you win")
+            game_cond = True
+
+
+    else:
+        misletters = misletters + guess
+
+        if len(misletters) == len(DIFFERENT_STEP) - 1:
+            display_screen(misletters, correct_letters, secret_word)
+            print("You have run out of guesses !\n After" +
+                  str(len(misletters)) + "miss guessed and" +
+                  str(len(correct_letters)) + "correct guesses, the word is that: " + secret_word
+                  )
+            game_cond = True
+
+    if game_cond:
+        if reset_game():
+            misletters = ""
+            correct_letters = ""
+            secret_word = take_r_words(word_list)
+            game_cond = False
+
+        else:
+            break
