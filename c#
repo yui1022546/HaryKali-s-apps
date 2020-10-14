@@ -1,0 +1,190 @@
+using System;
+using System.ComponentModel;
+using System.Collections.Generic;
+using System.Net.Http.Headers;
+
+namespace CSharpSelectClass
+{
+    struct student
+    {
+        public string student_ID;
+        public string name;
+        //public enum grade { degree, master, doctor, other };
+        public int grade;
+        public string class_name;
+
+
+    }
+
+    class SelectClasses {
+
+
+
+        public List<student> studnet_list = new List<student>();
+        public List<string> master_classes = new List<string> { "硕士课程1", "硕士课程2", "硕士课程3" };
+        public List<string> doctor_classes = new List<string> { "博士课程1", "博士课程2", "博士课程3" };
+        public List<string> degree_classes = new List<string> { "本科课程1", "本科课程2", "本科课程3" };
+
+
+        public void welcome_board() {
+            Console.WriteLine("===========================");
+            Console.WriteLine("      1.录入学生信息");
+            Console.WriteLine("      2.显示学生与选课信息");
+            Console.WriteLine("      3.退出");
+            Console.WriteLine("===========================");
+
+        }
+
+
+
+
+        public void add_student(string studnet_ID,string name,int grade) {
+            student add_studnet;
+            add_studnet.student_ID = studnet_ID;
+            add_studnet.name = name;
+            add_studnet.grade = grade;
+            add_studnet.class_name = "暂时还没有班级";
+
+            studnet_list.Add(add_studnet);
+
+            Console.WriteLine("下方是您输入的信息，请核对:");
+            Console.WriteLine("\t学号 :{0}",studnet_list[0].student_ID);
+            Console.WriteLine("\t姓名 :{0}", studnet_list[0].name);
+            Console.WriteLine("\t年级:{0}", studnet_list[0].grade);
+            Console.WriteLine("\t班级名称:{0}", studnet_list[0].class_name);
+
+
+        }
+        public void show_student_infrom(int sutdent_list_id) {
+
+            Console.WriteLine("下方是您输入的信息，请核对:");
+            Console.WriteLine("\tStudnetID :{0}", studnet_list[0].student_ID);
+            Console.WriteLine("\tName :{0}", studnet_list[0].name);
+            Console.WriteLine("\tGrade:{0}", studnet_list[0].grade);
+
+
+
+        }
+
+        public string select_degree_class() {
+            int class_num;
+            Console.WriteLine("请选择你的课程");
+            Console.WriteLine("===========================");
+            foreach (string name in degree_classes) {
+                Console.WriteLine("      {0}",name);
+               
+            }
+            Console.WriteLine("===========================");
+            class_num = int.Parse(Console.ReadLine());
+            Console.WriteLine("您已成功选择 {0}",degree_classes[class_num-1]);
+            return degree_classes[class_num];
+
+
+        }
+        public string select_master_class()
+        {
+            int class_num;
+            Console.WriteLine("请选择你的课程");
+            Console.WriteLine("===========================");
+            foreach (string name in master_classes)
+            {
+                Console.WriteLine("      {0}", name);
+
+            }
+            Console.WriteLine("===========================");
+            class_num = int.Parse(Console.ReadLine());
+            Console.WriteLine("您已成功选择 {0}",master_classes[class_num-1]);
+            return master_classes[class_num];
+
+
+        }
+        public string select_doctor_class()
+        {
+            int class_num;
+            Console.WriteLine("请选择你的课程");
+            Console.WriteLine("===========================");
+            foreach (string name in doctor_classes)
+            {
+                Console.WriteLine("      {0}", name);
+
+            }
+            Console.WriteLine("===========================");
+            class_num = int.Parse(Console.ReadLine());
+            Console.WriteLine("您已成功选择 {0}",doctor_classes[class_num-1]);
+            return doctor_classes[class_num];
+
+
+        }
+
+
+    }
+    
+    
+    
+    
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int studnet_list_id = 0;
+            while (true)
+            {   
+                
+                SelectClasses sys1 = new SelectClasses();
+                sys1.welcome_board();
+                string m_name;
+                string m_studentid;
+                int grade;
+                string m_class_id;
+                int menu_con = int.Parse(Console.ReadLine());
+                if (menu_con == 1)
+                {
+
+                    Console.WriteLine("请在下方按照提示输入学生的信息");
+
+                    Console.WriteLine("请输入你的学号");
+                    m_studentid = Console.ReadLine();
+
+                    Console.WriteLine("请输入你的名字");
+                    m_name = Console.ReadLine();
+
+                    Console.WriteLine("请输入你的年级：1.本科 2.硕士 3.博士");
+                    grade = int.Parse(Console.ReadLine());
+                    sys1.add_student(m_studentid, m_name, grade);
+
+                    switch (grade)
+                    {
+
+
+                        case 1:
+                            m_class_id = sys1.select_degree_class();
+                            break;
+
+
+                        case 2:
+                            m_class_id = sys1.select_master_class();
+                            break;
+
+
+                        case 3:
+                            m_class_id = sys1.select_doctor_class();
+                            break;
+
+                    }
+
+
+
+                }
+                else if (menu_con == 3) {
+
+                    break;
+                
+                }
+
+
+
+
+            }
+        }
+    }
+}
