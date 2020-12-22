@@ -1,0 +1,34 @@
+void ques2() {
+
+    int len1, len2;
+    int location = -1;
+    char str1[100], str2[100];
+
+    scanf("%s", str1);
+    scanf("%s", str2);
+
+    len1 = strlen(str1);
+    len2 = strlen(str2);
+    if (len2 > len1) {
+        printf("%d", -1);
+    }
+    int i;
+    int j;
+    for (i = 0; i < len1; i++) {
+        for (j = 0; j < len2; j++) {
+            if (i + j >= len1)
+                printf("%d", -1);
+            if (str1[i + j] != str2[j] && str1[i + j] != str2[j] + 32 && str1[i + j] != str2[j] - 32) {
+                break;
+            }
+
+            if (j == len2 - 1)
+                location = i;
+        }
+
+
+    }
+
+    printf("%d", location);
+
+}
